@@ -1,49 +1,81 @@
 package org.lessons.java.shop;
 
-public class Product {
-    /*
-     * Un prodotto è caratterizzato da:
-     * -codice (numero intero)
-     * - nome
-     * - descrizione
-     * - prezzo
-     * - iva
-     * Usate opportunamente costruttori, attributi ed eventuali altri metodi di
-     * “utilità” per fare in modo che:
-     * - alla creazione di un nuovo prodotto il codice sia valorizzato con un numero
-     * random
-     * - il prodotto esponga un metodo per avere il prezzo base
-     * - il prodotto esponga un metodo per avere il prezzo comprensivo di iva
-     * - il prodotto esponga un metodo per avere il nome esteso, ottenuto
-     * concatenando codice-nome
-     */
-    int productCode;
-    String name;
-    String description;
-    double price;
-    int iva;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Random;
 
-    public Product(int productCode, String name, String description, double price, int iva) {
-        this.productCode = productCode;
+public class Product {
+    private int code;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private BigDecimal iva;
+
+    public Product(String name, String description, BigDecimal price, BigDecimal iva) {
+        Random rand = new Random();
+        this.code = rand.nextInt(9999);
         this.name = name;
         this.description = description;
         this.price = price;
         this.iva = iva;
     }
 
-    public void basePrice() {
-        System.out.println(this.price + " euro");
+    public Product() {
+        Random rand = new Random();
+        this.code = rand.nextInt(9999);
+        this.name = "-";
+        this.description = "-";
+        this.price = new BigDecimal(0);
+        this.iva = new BigDecimal(0);
     }
 
-    public void ivaPrice() {
-        double calc = this.price - this.price * this.iva / 100;
-        String roundedCalc = String.format("%.2f", calc);
-
-        System.out.println(roundedCalc + " euro");
+    public int getCode() {
+        return this.code;
     }
 
-    public void completedName() {
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        System.out.println(this.productCode + this.name);
+    public String getName() {
+        return this.name;
+    }
+
+    public void setDescription(String desc) {
+        this.description = desc;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getPrice() {
+        return this.price;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
+    public BigDecimal getIva() {
+        return this.iva;
+    }
+
+    public BigDecimal getIvaPrice() {
+        if (price != null && iva != null) {
+            return price.add(price.multiply(iva)).setScale(2, RoundingMode.DOWN);
+        }
+        return null;
+    }
+
+    public String getFullName() {
+        if (name != null) {
+            return code + "-" + name;
+        }
+        return null;
     }
 }
